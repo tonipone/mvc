@@ -6,5 +6,3 @@ use \Core\Config as config;
 define('PROOT',__DIR__);
 define('DS',DIRECTORY_SEPARATOR);
 //define('ROOT',dirname(__FILE__));
-$ver = config::get('version');
-var_dump(PROOT);
