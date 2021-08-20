@@ -2,11 +2,12 @@
 
 session_start();
 
-use \Core\Config;
+use \Core\{Config, Router};
 
 define('PROOT',__DIR__);
 define('DS',DIRECTORY_SEPARATOR);
-include('core/Config.php');
+
+
 //define('ROOT',dirname(__FILE__));
 spl_autoload_register(function($className){
     $parts = explode('\\', $className);
@@ -20,4 +21,11 @@ spl_autoload_register(function($className){
 });
 
 $dbName = Config::get('db_name');
-var_dump($dbName);
+
+$rootDir = Config::get('root_dir');
+define('ROOT',$rootDir);
+
+$url = $_SERVER['REQUEST_URI'];
+$url = str_replace(ROOT,'',$url);
+$url = preg_replace('/(\?.+)/','',$url);
+Router::route($url);
