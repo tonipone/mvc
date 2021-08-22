@@ -5,7 +5,7 @@ namespace Core;
 
 
 use App\Controllers\BlogController;
-use \Exception;
+// use \Exception;
 class Router {
 	public static function route($url){
 		$urlParts = explode('/',$url);
@@ -24,9 +24,9 @@ class Router {
 		array_shift($urlParts);
 
 
-		if(class_exists($controller)){
+		/*if(class_exists($controller)){
 			throw new \Exception("The controller \"{$controllerName}\" does not exits.");
-		}
+		}*/
 
 		$controllerClass = new $controller($controllerName,$actionName);
 		call_user_func_array([$controllerClass,$action],$urlParts);
