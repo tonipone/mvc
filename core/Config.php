@@ -14,7 +14,7 @@ class Config
         'default_layout'      => 'default', // Default layout that is used
         'default_site_title'  => 'AP_MVC', // Default Site title
         'db_host'             => '127.0.0.1', // DB host please use IP address not domain
-        'db_name'             => 'mvc', // DB name
+        'db_name'             => 'ap_mvc', // DB name
         'db_user'             => 'root', // DB user
         'db_password'         => '', // DB password
         'login_cookie_name'   => 'hakdjri2341l8a' // Login cookie name
