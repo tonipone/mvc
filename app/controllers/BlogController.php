@@ -7,11 +7,9 @@ use Core\Controller;
 class BlogController extends Controller {
 
 	public function indexAction(){
-		die("You made it to the index action {}");
+		$this->view->render();
 	}
 
-	public function fooAction(){
-		die("You made it to the foo action");
-	}
+
 
 }
