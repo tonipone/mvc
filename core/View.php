@@ -9,14 +9,17 @@ class View {
 	private $_siteTitle = '', $_content = [], $_currentContent, $_buffer, $_layout;
 	private $_defaultViewPath;
 
+
 	public function __construct($path) {
 		$this->_defaultViewPath = $path;
 		$this->_siteTitle = Config::get('default_site_title');
+
 
 	}
 
 	public function setLayout($layout){
 		$this->_layout = $layout;
+		// var_dump($this->_layout);
 	}
 
 	public function setSiteTitle($title){
@@ -28,6 +31,7 @@ class View {
 	}
 
 	public function render($path = ''){
+
 		if(empty($path)){
 			$path = $this->_defaultViewPath;
 		}
@@ -67,6 +71,13 @@ class View {
 			echo $this->_content[$key];
 		}else{
 			echo('');
+		}
+	}
+
+	public function partial($path){
+		$fullPath = PROOT . DS . 'app' . DS . 'views' . DS . $path . '.php';
+		if(file_exists($fullPath)){
+			include($fullPath);
 		}
 	}
 }

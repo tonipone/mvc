@@ -15,6 +15,7 @@ class Controller {
 		$this->_actionName = $action;
 		$viewPath = strtolower($controller)."/".$action;
 		$this->view = new View($viewPath);
+		
 		$this->view->setLayout(Config::get('default_layout'));
 	}
 }
