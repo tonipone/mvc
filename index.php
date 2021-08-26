@@ -30,7 +30,7 @@ $url = $_SERVER['REQUEST_URI'];
 $url = str_replace(ROOT,'',$url);
 $url = preg_replace('/(\?.+)/','',$url);
 //die($url);
-$db = new \Core\DB();
+//$db = new \Core\DB();
 
 Router::route($url);
 
