@@ -34,12 +34,22 @@ class DB {
 
 		try{
 			$this->_dbh = new PDO("mysql:host={$host};dbname={$name}", $user, $pass, $options);
+			//echo "Connesso...";
 
 		}catch(Exception $e){
 			throw new Exception($e->getMessage());
 
 		}
 
+	}
+	
+	public static function getInstance(){
+		
+		if(!self::$_db){
+			self::$_db = new self();
+		}		
+		
+		return self::$_db;
 	}
 
 }
