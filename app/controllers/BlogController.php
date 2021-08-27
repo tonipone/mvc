@@ -7,6 +7,7 @@ use Core\{DB,Controller,H};
 class BlogController extends Controller {
 
 	public function indexAction(){
+		
 		$db = DB::getInstance();
 		$sql = "INSERT INTO articles (title , body) VALUES (:title, :body)";
 		$bind = ['title' => 'Nuovo Articolo', 'body' => 'Contenuto Articolo'];
