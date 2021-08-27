@@ -16,7 +16,7 @@ class Config
         'db_host'             => 'localhost', // DB host please use IP address not domain
         'db_name'             => 'cms', // DB name
         'db_user'             => 'root', // DB user
-        'db_password'         => '', // DB password
+        'db_password'         => 'root', // DB password
         'login_cookie_name'   => 'hakdjri2341l8a' // Login cookie name
     ];
 

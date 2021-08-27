@@ -18,9 +18,9 @@ class DB {
 
 	protected $_dbh, $_results, $_lastInsertId, $_rowCount = 0, $_fetchType = PDO::FETCH_OBJ, $_class, $_error = false;
 	protected static $_db;
+	protected $_stmt;
 
 	public function __construct() {
-
 
 		$host = Config::get('db_host');
 		$name = Config::get('db_name');
@@ -50,6 +50,43 @@ class DB {
 		}		
 		
 		return self::$_db;
+	}
+
+	public function execute($sql, $bind=[]){
+		$this->_results = null;
+		$this->_lastInsertId = null;
+		$this->_error = false;
+		$this->_stmt = $this->_dbh->prepare($sql);
+
+		if(!$this->_stmt->execute($bind)){
+
+			$this->_error = true;
+		} else {
+			$this->_lastInsertId = $this->_dbh->lastInsertId();
+		}
+
+		return $this;
+	}
+
+	public function query($sql, $bind = []){
+		$this->execute($sql,$bind);
+		if(!$this->_error){
+			$this->_rowCount = $this->_stmt->rowCount();
+			$this->_results = $this->_stmt->fetchAll($this->_fetchType);
+		}
+
+		return $this;
+	}
+
+	public function results(){
+		return $this->_results;
+	}
+
+	public function count(){
+		return $this->_rowCount;
+	}
+	public function lastInsertId(){
+		return $this->_lastInsertId;
 	}
 
 }
