@@ -122,12 +122,17 @@ class DB {
 	public function results(){
 		return $this->_results;
 	}
-
 	public function count(){
 		return $this->_rowCount;
 	}
 	public function lastInsertId(){
 		return $this->_lastInsertId;
+	}
+	public function setClass($class){
+		$this->_class = $class;
+	}
+	public function setFetchType($type) {
+		$this->_fetchType = $type;
 	}
 
 }
