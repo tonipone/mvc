@@ -14,7 +14,7 @@ class BlogController extends Controller {
 		$query = $db->query($sql,$bind);
 		$lastId = $query->lastInsertId();*/
 		//$db->insert('articles',['title' => 'Article 1','body'=>'Contenuto 1']);
-		$db->update('articles',['title' => 'Article Up','body'=>'Contenuto Up'],['id' => '12']);
+		//$db->update('articles',['title' => 'Article Up','body'=>'Contenuto Up'],['id' => '12']);
 		// H::dnd($lastId);
 
 		/*$sql = "SELECT * FROM articles";
