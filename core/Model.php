@@ -80,7 +80,7 @@ class Model {
 		unset($params['limit']);
 		unset($params['offset']);
 		$table = static::$table;
-		$sql = " ELECT COUNT(*) AS total FROM {$table}";
+		$sql = " SELECT COUNT(*) AS total FROM {$table}";
 		list('sql' => $conds, 'bind' => $bind) = self::queryParamBuilder($params);
 		$sql .= $conds;
 		$db = static::getDb();
