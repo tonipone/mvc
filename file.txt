@@ -2,3 +2,8 @@ Lez 14
 
 git remote add origin git@github.com:tonipone/mvc.git 
 
+<div class="form-grpup">
+	<label for="fname">First Name</label>
+	<input id="fname" name="fname" value="" />
+	<div class="invalid-feedback">error message</div>
+</div> 
