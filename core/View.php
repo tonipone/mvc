@@ -13,8 +13,6 @@ class View {
 	public function __construct($path) {
 		$this->_defaultViewPath = $path;
 		$this->_siteTitle = Config::get('default_site_title');
-
-
 	}
 
 	public function setLayout($layout){
