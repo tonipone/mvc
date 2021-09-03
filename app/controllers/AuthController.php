@@ -14,7 +14,8 @@ class AuthController extends Controller{
 		}else{
 			$user = Users::findById($id);
 		}
-		
+
+
 		// if posted
 		if($this->request->isPost()){
 			Session::csrfCheck();
