@@ -23,6 +23,7 @@ class AuthController extends Controller{
 		$this->view->user = $user;		
 		//$this->view->errors = ['fname' => 'First name is required'];
 		$this->view->role_options = ['' => '', Users::AUTHOR_PERMISSION => 'Author', Users::ADMIN_PERMISSION => 'Admin'];
+
 		$this->view->errors = $user->getErrors();
 		$this->view->render();
 	}
