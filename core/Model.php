@@ -18,7 +18,7 @@ class Model {
 	protected static $columns = false;
 	protected $_validationPassed = true;
 	protected $_errors = [];
-	protected $_skipUpdate;
+	protected $_skipUpdate =[];
 
 	public static function getDb($setFetchClass = false){
 		$db = DB::getInstance();
@@ -26,7 +26,6 @@ class Model {
 			$db->setClass(get_called_class());
 			$db->setFetchType(PDO::FETCH_CLASS);
 		}
-
 		return $db;
 	}
 
@@ -62,7 +61,7 @@ class Model {
 	}
 
 	public static function findFirst($params = []){
-		$db = static::getDb();
+		$db = static::getDb(true);
 		list('sql' => $sql, 'bind' => $bind) = self::selectBuilder($params);
 		$results = $db->query($sql, $bind)->results();
 
@@ -70,7 +69,7 @@ class Model {
 	}
 
 	public static function findById($id){
-		return self::findFirst([
+		return static::findFirst([
 			'conditions' => "id = :id",
 			'bind' => ['id' => $id]
 		]);
@@ -99,7 +98,7 @@ class Model {
 			if($this->isNew()){
 				$save = $db->insert(static::$table, $values);
 				if($save){
-					$this->id = $db->getlastInsertId();
+					$this->id = $db->lastInsertId();
 				}
 			}else{
 				$save = $db->update(static::$table,$values, ['id' => $this->id]);
@@ -107,6 +106,8 @@ class Model {
 		}
 		return $save;
 	}
+
+
 
 	public function isNew(){
 		return empty($this->id);
@@ -170,8 +171,9 @@ class Model {
 
 	public function getValuesForSave(){
 		$columns = static::getColumns();
+		//H::dnd($columns);
 		$values = [];
-		foreach ( $columns as $column ) {
+		foreach ($columns as $column) {
 			if(!in_array($column, $this->_skipUpdate)){
 				$values[$column] = $this->{$column};
 			}
@@ -180,8 +182,9 @@ class Model {
 		return $values;
 	}
 
+
 	public static function getColumns(){
-		if(static::$columns){
+		if(!static::$columns){
 			$db = static::getDb();
 			$table = static::$table;
 			$sql = "SHOW COLUMNS FROM {$table}";

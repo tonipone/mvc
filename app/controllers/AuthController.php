@@ -17,7 +17,13 @@ class AuthController extends Controller{
 		
 		// if posted
 		if($this->request->isPost()){
-			H::dnd($this->request->get());
+			Session::csrfCheck();
+			//H::dnd($this->request->get());
+			$fields = ['fname','lname','email','acl','password','confirm'];
+			foreach ( $fields as $field ) {
+				$user->{$field} = $this->request->get($field);
+			}
+			$user->save();
 		}
 		
 		$this->view->user = $user;		
