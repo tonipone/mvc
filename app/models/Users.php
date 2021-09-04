@@ -5,7 +5,7 @@ namespace App\Models;
 
 use Core\Model;
 use Core\Validators\EmailValidator;
-use Core\Validators\{RequiredValidator, MatchesValidator};
+use Core\Validators\{RequiredValidator, MatchesValidator,MinValidator,MaxValidator,UniqueValidator};
 
 class Users extends Model {
 	
@@ -24,13 +24,16 @@ class Users extends Model {
 		$this->runValidation(new RequiredValidator($this,['field' => 'lname', 'msg' => 'Last Name is a required field.']));
 		$this->runValidation(new RequiredValidator($this,['field' => 'email', 'msg' => 'Email is a required field.']));
 		$this->runValidation(new EmailValidator($this, ['field' => 'email', 'msg' => 'You must provide a valide email']));
+		$this->runValidation(new UniqueValidator($this, ['field' => 'email', 'msg' => 'A user with that email address already exists.']));
 		$this->runValidation(new RequiredValidator($this,['field' => 'acl', 'msg' => 'Role is a required field.']));
 
 		if($this->isNew()){
 			$this->runValidation(new RequiredValidator($this,['field' => 'password', 'msg' => 'Password is a required field.']));
 			$this->runValidation(new RequiredValidator($this,['field' => 'confirm', 'msg' => 'Confirm Password is a required field.']));
 			$this->runValidation(new MatchesValidator($this,['field' => 'confirm','rule' => $this->password ,'msg' => 'Your Password do not match .']));
-
+			$this->runValidation(new MinValidator($this, ['field' => 'password','rule'=> 5,'msg' => 'Password must be at least 5 characters.']));
+			$this->runValidation(new MaxValidator($this, ['field' => 'password','rule'=> 12,'msg' => 'Password must be a maximum of 12 characters.']));
+			
 			$this->password = password_hash($this->password, PASSWORD_DEFAULT);
 		}
 	}
