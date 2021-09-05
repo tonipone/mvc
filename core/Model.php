@@ -95,6 +95,7 @@ class Model {
 		if($this->_validationPassed){
 			$db = static::getDb();
 			$values = $this->getValuesForSave();
+			//H::dnd($values);
 			if($this->isNew()){
 				$save = $db->insert(static::$table, $values);
 				if($save){

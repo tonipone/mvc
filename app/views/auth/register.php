@@ -5,7 +5,7 @@
 <?php $this->start('content'); ?>
 <div class="row">
 	<div class="col-md-8 offset-md-2 poster">
-		<h1>Register Users</h1>
+		<h1><?= $this->header; ?></h1>
 		
 		
 		<form action="" method="POST">
