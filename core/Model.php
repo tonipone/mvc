@@ -13,7 +13,7 @@ use Core\{DB, Request};
 
 
 class Model {
-
+	
 	protected static $table = "";
 	protected static $columns = false;
 	protected $_validationPassed = true;

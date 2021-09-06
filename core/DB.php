@@ -53,6 +53,7 @@ class DB {
 	}
 
 	public function execute($sql, $bind=[]){
+		//H::dnd($sql);
 		$this->_results = null;
 		$this->_lastInsertId = null;
 		$this->_error = false;

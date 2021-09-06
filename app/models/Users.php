@@ -3,13 +3,14 @@
 namespace App\Models;
 
 
-use Core\Model;
+use Core\{Model,Session,Config,Cookie, H};
 use Core\Validators\EmailValidator;
 use Core\Validators\{RequiredValidator, MatchesValidator,MinValidator,MaxValidator,UniqueValidator};
+use App\Models\UserSession;
 
 class Users extends Model {
 	
-	protected static $table = "users";
+	protected static $table = "users", $_current_user = false;
 	public $id, $created_at, $updated_at, $fname, $lname, $email, $password, $acl, $blocked=0, $confirm, $remember='';
 	
 	
@@ -35,6 +36,69 @@ class Users extends Model {
 			$this->runValidation(new MaxValidator($this, ['field' => 'password','rule'=> 12,'msg' => 'Password must be a maximum of 12 characters.']));
 			
 			$this->password = password_hash($this->password, PASSWORD_DEFAULT);
+		}else{
+			$this->_skipUpdate = ['password'];
 		}
 	}
+	
+	public function validateLogin(){
+        $this->runValidation(new RequiredValidator($this, ['field' => 'email', 'msg' => "Email is a required field."]));
+        $this->runValidation(new RequiredValidator($this, ['field' => 'password', 'msg' => "Password is a required field."]));
+    }
+
+    public function login($remember = false) {		
+        Session::set('logged_in_user', $this->id);
+        self::$_current_user = $this;
+        if($remember) {
+            $now  = time();
+            $newHash = md5("{$this->id}_{$now}");
+            $session = UserSessions::findByUserId($this->id);
+            if(!$session) {
+                $session = new UserSessions();
+            }
+            $session->user_id = $this->id;
+            $session->hash = $newHash;
+            $session->save();
+            Cookie::set(Config::get('login_cookie_name'), $newHash, 60 * 60 * 24 * 30);
+        }
+    }
+
+    public static function loginFromCookie() {
+        $cookieName = Config::get('login_cookie_name');
+        if(!Cookie::exists($cookieName)) return false;
+        $hash = Cookie::get($cookieName);
+        $session = UserSessions::findByHash($hash);
+        if(!$session) return false;
+        $user = self::findById($session->user_id);
+        if($user) {
+            $user->login(true);
+        }
+    }
+
+    public function logout() {
+        Session::delete('logged_in_user');
+        self::$_current_user = false;
+        $session = UserSessions::findByUserId($this->id);
+        if($session) {
+            $session->delete();
+        }
+        Cookie::delete(Config::get('login_cookie_name'));
+    }
+
+    public static function getCurrentUser() {
+        if(!self::$_current_user && Session::exists('logged_in_user')) {
+            $user_id = Session::get('logged_in_user');
+            self::$_current_user = self::findById($user_id);
+        }
+        if(!self::$_current_user) self::loginFromCookie();
+        return self::$_current_user;
+    }
+
+    public function hasPermission($acl) {
+        return $this->acl == $acl;
+    }
+
+    public function displayName() {
+        return trim($this->fname . ' ' . $this->lname);
+    }
 }
