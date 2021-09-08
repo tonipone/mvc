@@ -3,6 +3,7 @@
 session_start();
 
 use \Core\{Config, Router,H};
+use App\Models\Users;
 
 define('PROOT',__DIR__);
 define('DS',DIRECTORY_SEPARATOR);
@@ -20,6 +21,10 @@ spl_autoload_register(function($className){
         include($path);
     }
 });
+
+// Check for logged in user
+$currentUser = Users::getCurrentUser();
+// H::dnd($currentUser);
 
 $dbName = Config::get('db_name');
 
