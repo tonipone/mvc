@@ -22,7 +22,7 @@
 				<?= FH::inputBlock('Confirm Password', 'confirm','' , ['class' => 'form-control','type'=>'password'], ['class' => 'form-group col-md-6'], $this->errors ); ?>				
 			</div>
 			<div class="text-right">
-				<a href="#" class="btn btn-secondary">Cancel</a>
+				<a href="<?=ROOT?>admin/users" class="btn btn-secondary">Cancel</a>
 				<input class="btn btn-primary" value="Save" type="submit" /> 
 			</div>
 		</form>

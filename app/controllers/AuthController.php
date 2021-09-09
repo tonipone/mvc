@@ -8,6 +8,7 @@ use App\Models\Users;
 class AuthController extends Controller{
 	
 	public function registerAction($id='new'){
+		$this->view->setLayout('admin');
 		if($id == 'new'){
 			$user = new Users();
 			//var_dump($user);
@@ -33,9 +34,10 @@ class AuthController extends Controller{
 				$user->resetPassword = true;
 			}
 			if($user->save()){
+
 				$msg =($id == 'new')? "User Created" : "User Updated";
 				Session::msg($msg, 'success');
-				Router::redirect('blog/index');
+				Router::redirect('admin/users');
 			}
 			
 		}

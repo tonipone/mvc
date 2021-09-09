@@ -12,6 +12,7 @@ class Users extends Model {
 	
 	protected static $table = "users", $_current_user = false;
 	public $id, $created_at, $updated_at, $fname, $lname, $email, $password, $acl, $blocked=0, $confirm, $remember='';
+	public $resetPassword = false;
 	
 	
 	const AUTHOR_PERMISSION = 'author';
