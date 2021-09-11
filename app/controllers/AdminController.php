@@ -9,6 +9,7 @@
 namespace App\Controllers;
 use Core\Controller;
 use App\Models\Users;
+use Core\H;
 use Core\Router;
 use Core\Session;
 
@@ -30,6 +31,8 @@ class AdminController extends Controller{
 			Router::redirect('admin/articles');
 		}
 		$params = ['order' => 'lname,fname'];
+		$params = Users::mergeWithPagination($params);
+		//H::dnd($params);
 		$this->view->users = Users::find($params);
 		$this->view->total = Users::findTotal($params);
 		$this->view->render();
