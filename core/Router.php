@@ -2,6 +2,8 @@
 
 namespace Core;
 
+use Core\Session;
+use App\Models\Users;
 
 
 // use App\Controllers\BlogController;
@@ -53,5 +55,14 @@ class Router {
         }
         exit();
 		
+	}
+
+	public static function permRedirect($perm, $redirect, $msg="You do not have access to this page"){
+		$user = Users::getCurrentUser();
+		$allowed = $user && $user->hasPermission($perm);
+		if(!$allowed){
+			Session::msg($msg);
+			self::redirect($redirect);
+		}
 	}
 }
