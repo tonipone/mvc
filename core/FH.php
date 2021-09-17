@@ -48,7 +48,6 @@ class FH {
     }
 
 	public static function textArea($label, $id, $value, $inputAttrs=[], $wrapperAttrs=[],$errors=[]){
-
 		$wrapperStr = self::processAttrs($wrapperAttrs);
 		$inputAttrs = self::appendErrors($id, $inputAttrs, $errors);
 		$inputAttrs = self::processAttrs($inputAttrs);
@@ -57,7 +56,20 @@ class FH {
 		$html = "<div {$wrapperStr}>";
 		$html.= "<label for ='{$id}' >{$label}</label>";
 		$html .= "<textarea id='{$id}' name='{$id}' value='{$value}' {$inputAttrs}>{$value}</textarea>";
-		$html .= "<div class='invalid-feddback' >{$errorMsg}</div></div> ";
+		$html .= "<div class='invalid-feedback' >{$errorMsg}</div></div> ";
+
+		return $html;
+	}
+
+	public static function fileUpload($label, $id, $input = [], $wrapper = [], $errors = []){
+		$inputAttrs = self::appendErrors($id,$input,$errors);
+		$wrapperStr = self::processAttrs($wrapper);
+		$inputStr = self::processAttrs($inputAttrs);
+		$errorMsg = array_key_exists($id, $errors) ? $errors[$id] : "";
+		$html = "<div {$wrapperStr}>";
+		$html.= "<label for=\"{$id}\" >{$label}</label>";
+		$html .= "<input type=\"file\"  id=\"{$id}\" name=\"{$id}\"  {$inputStr} />";
+		$html .= "<div class='invalid-feedback' >{$errorMsg}</div></div> ";
 
 		return $html;
 	}
@@ -74,7 +86,6 @@ class FH {
 	}
 	
 	public static function processAttrs($attrs){
-		
 		$html = "";
 		foreach($attrs as $key => $value){
 		$html .= " {$key}='{$value}'";

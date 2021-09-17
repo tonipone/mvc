@@ -15,3 +15,7 @@
 
 
 ##Lez. 27 del 08Sett2021 Log Out 
+
+
+## Permessi alla cartella per gli upload
+* (sudo) chmod -R 777 ./uploads
