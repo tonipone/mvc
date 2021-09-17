@@ -28,6 +28,7 @@ class Upload {
 	}
 
 	public function validate(){
+
 		$this->errors = [];
 
 		if(empty($this->tmp) && $this->required){

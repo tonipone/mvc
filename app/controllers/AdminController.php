@@ -24,6 +24,14 @@ class AdminController extends Controller{
 
 	public function articlesAction(){
 		Router::permRedirect(['author','admin'],'blog/index');
+		$params = [
+			'conditions' => 'user_id = :user_id',
+			'bind' => ['user_id' => $this->currentUser->id],
+			'order' => 'id DESC'
+		];
+		$params = Articles::mergeWithPagination($params);
+		$this->view->articles = Articles::find($params);
+		$this->view->total = Articles::findTotal($params);
 		$this->view->render();
 	}
 
@@ -53,7 +61,7 @@ class AdminController extends Controller{
 			$article->category_id  = $this->request->get('category_id');
 			$upload = new Upload('featured_image');
 			if($id != 'new'){
-				$article->required = false;
+				$upload->required = false; //$article->required = false;
 			}
 			$uploadErrors = $upload->validate();
 			if(!empty($uploadErrors)){
@@ -64,9 +72,11 @@ class AdminController extends Controller{
 			if($article->save()){
 				if(!empty($upload->tmp)){
 					$filePath = "app/uploads/featured_images/featured_image_{$article->id}";
-					$upload->upload(PROOT . DS . $filePath);
-					$article->img = $filePath;
-					$article->save();
+					if($upload->upload(PROOT . DS . $filePath)){
+						$upload->upload(PROOT . DS . $filePath);
+						$article->img = $filePath;
+						$article->save();
+					}
 				}
 				Session::msg("{$article->title} saved. ", 'success');
 				Router::redirect('admin/articles');
@@ -80,6 +90,22 @@ class AdminController extends Controller{
 		$this->view->errors = $article->getErrors();
 		$this->view->heading = $id === 'new' ? 'Add Article ' : 'Edit Article';
 		$this->view->render();
+	}
+
+	public function deleteArticleAction($id){
+		$params = [
+			'conditions' => "id = :id AND user_id = :user_id",
+			'bind' => ['id' => $id, 'user_id' => $this->currentUser->id]
+		];
+		$article = Articles::findFirst($params);
+		if($article){
+			Session::msg("Article Deleted", 'success');
+			unlink(PROOT . DS . $article->img);
+			$article->delete();
+		}else{
+			Session::msg("You do not have permission to delete that article");
+		}
+		Router::redirect('admin/articles');
 	}
 
 	public function usersAction(){
