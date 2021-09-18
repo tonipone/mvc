@@ -35,11 +35,11 @@ class Upload {
 			$this->errors[$this->field] = "File is required";
 		}
 		//check size
-		if($this->size > $this->maxSize){
+		if(!empty($this->tmp) && $this->size > $this->maxSize){
 			$this->errors[$this->field] = "Exceeded file size linit of " . $this->formatBytes($this->maxSize);
 		}
 		//check if allowed type
-		if(empty($this->errors)){
+		if(!empty($this->tmp) && empty($this->errors)){
 			$finfo = new \finfo(FILEINFO_MIME_TYPE);
 			$type = $finfo->file($this->tmp);
 			if(array_search($type, $this->allowedFileTypes) === false){
