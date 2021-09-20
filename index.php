@@ -4,12 +4,15 @@ session_start();
 
 use \Core\{Config, Router,H};
 use App\Models\Users;
+use Symfony\Component\Dotenv\Dotenv ;
 
 define('PROOT',__DIR__);
 define('DS',DIRECTORY_SEPARATOR);
 
-
 //define('ROOT',dirname(__FILE__));
+
+require_once(PROOT . DS . 'lib/dotenv/Dotenv.php');
+
 
 spl_autoload_register(function($className){
     $parts = explode('\\', $className);
@@ -22,9 +25,14 @@ spl_autoload_register(function($className){
     }
 });
 
+//load .env file
+$dotenv = new Dotenv();
+$dotenv->load(PROOT . DS . '.env');
 // Check for logged in user
 $currentUser = Users::getCurrentUser();
-// H::dnd($currentUser);
+
+
+//H::dnd($_ENV);
 
 $dbName = Config::get('db_name');
 
