@@ -41,7 +41,11 @@ define('ROOT',$rootDir);
 
 
 $url = $_SERVER['REQUEST_URI'];
-$url = str_replace(ROOT,'',$url);
+if(ROOT != '/'){
+	$url = str_replace(ROOT,'',$url);
+}else{
+	$url = ltrim($url,'/');
+}
 $url = preg_replace('/(\?.+)/','',$url);
 $currentPage = $url;
 
